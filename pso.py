@@ -13,6 +13,7 @@ max_iter是反覆運算次數
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+import math
 
 # ----------------------PSO參數設置---------------------------------
 class PSO():
@@ -55,19 +56,18 @@ class PSO():
 # ---------------------目標函數 Rastrigin函數-----------------------------
     def rastriginFunction(self,x):    
         total = 0    
-        length = len(x)    
-        x = x**2    
-        for i in range(length):    
-            total += x[i]    
+        length = len(x)
+        for i in range(length):
+            total += x[i]**2 - 10 * math.cos(2 * math.pi * x[i]) + 10
         return total
 # ---------------------初始化種群----------------------------------
     def init_Population(self):
-        for i in range(self.pN - 1):
+        for i in range(self.pN):
             for j in range(self.dim):
                 self.X[i][j] = random.uniform(0, 1)
                 self.V[i][j] = random.uniform(0, 1)
             self.pbest[i] = self.X[i]
-            tmp = self.rosenbrockFunction(self.X[i], self.X[i+1])
+            tmp = self.rastriginFunction(self.X[i])
             self.p_fit[i] = tmp
             if tmp < self.fit:
                 self.fit = tmp
@@ -77,8 +77,8 @@ class PSO():
     def iterator(self):
         fitness = []
         for t in range(self.max_iter):
-            for i in range(self.pN - 1):  # 更新gbest\pbest
-                temp = self.rosenbrockFunction(self.X[i], self.X[i+1])
+            for i in range(self.pN):  # 更新gbest\pbest
+                temp = self.rastriginFunction(self.X[i])
                 if temp < self.p_fit[i]:  # 更新個體最優
                     self.p_fit[i] = temp
                     self.pbest[i] = self.X[i]
