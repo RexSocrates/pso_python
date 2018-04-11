@@ -46,12 +46,11 @@ class PSO():
             total += x[i]    
         return total      
 # ---------------------目標函數 Rosenbrock函數-----------------------------
-    def rosenbrockFunction(self,x):    
+    def rosenbrockFunction(self,x1, x2):    
         total = 0    
-        length = len(x)    
-        x = x**2    
-        for i in range(length):    
-            total += x[i]    
+        length = len(x1)
+        for i in range(length):
+            total += 100 * (x2[i] - x1[i]**2)**2 + (x1[i] - 1)**2
         return total
 # ---------------------目標函數 Rastrigin函數-----------------------------
     def rastriginFunction(self,x):    
@@ -63,12 +62,12 @@ class PSO():
         return total
 # ---------------------初始化種群----------------------------------
     def init_Population(self):
-        for i in range(self.pN):
+        for i in range(self.pN - 1):
             for j in range(self.dim):
                 self.X[i][j] = random.uniform(0, 1)
                 self.V[i][j] = random.uniform(0, 1)
             self.pbest[i] = self.X[i]
-            tmp = self.sphereFunction(self.X[i])
+            tmp = self.rosenbrockFunction(self.X[i], self.X[i+1])
             self.p_fit[i] = tmp
             if tmp < self.fit:
                 self.fit = tmp
@@ -78,8 +77,8 @@ class PSO():
     def iterator(self):
         fitness = []
         for t in range(self.max_iter):
-            for i in range(self.pN):  # 更新gbest\pbest
-                temp = self.sphereFunction(self.X[i])
+            for i in range(self.pN - 1):  # 更新gbest\pbest
+                temp = self.rosenbrockFunction(self.X[i], self.X[i+1])
                 if temp < self.p_fit[i]:  # 更新個體最優
                     self.p_fit[i] = temp
                     self.pbest[i] = self.X[i]
