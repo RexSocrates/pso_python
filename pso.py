@@ -13,6 +13,7 @@ max_iter是反覆運算次數
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+import math
 
 # ----------------------PSO參數設置---------------------------------
 class PSO():
@@ -56,9 +57,8 @@ class PSO():
     def rastriginFunction(self,x):    
         total = 0    
         length = len(x)    
-        x = x**2    
         for i in range(length):    
-            total += x[i]    
+            total += x[i]**2 - 10 * math.cos(2 * math.pi * x[i]) + 10
         return total
 # ---------------------初始化種群----------------------------------
     def init_Population(self):
