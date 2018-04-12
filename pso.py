@@ -62,12 +62,12 @@ class PSO():
         return total
 # ---------------------初始化種群----------------------------------
     def init_Population(self):
-        for i in range(self.pN - 1):
+        for i in range(self.pN):
             for j in range(self.dim):
                 self.X[i][j] = random.uniform(0, 1)
                 self.V[i][j] = random.uniform(0, 1)
             self.pbest[i] = self.X[i]
-            tmp = self.rosenbrockFunction(self.X[i], self.X[i+1])
+            tmp = self.rastriginFunction(self.X[i])
             self.p_fit[i] = tmp
             if tmp < self.fit:
                 self.fit = tmp
@@ -77,8 +77,8 @@ class PSO():
     def iterator(self):
         fitness = []
         for t in range(self.max_iter):
-            for i in range(self.pN - 1):  # 更新gbest\pbest
-                temp = self.rosenbrockFunction(self.X[i], self.X[i+1])
+            for i in range(self.pN):  # 更新gbest\pbest
+                temp = self.rastriginFunction(self.X[i])
                 if temp < self.p_fit[i]:  # 更新個體最優
                     self.p_fit[i] = temp
                     self.pbest[i] = self.X[i]
